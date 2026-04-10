@@ -3,11 +3,12 @@ import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 
 /**
- * FitGym - Link na Bio
+ * Welington R. - Link na Bio Pessoal
  * Design: Minimalismo Moderno com Foco em Movimento
  * Paleta: Branco limpo + Laranja vibrante (#FF6B35)
  * Tipografia: Poppins (display) + Inter (body)
  * Animações: Hover effects suaves, scale e rotate
+ * Espaço reservado para foto de perfil no topo
  */
 
 interface LinkItem {
@@ -93,14 +94,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Título Principal */}
-          <h1 className="font-display mb-4 text-4xl sm:text-5xl md:text-6xl text-gray-900">
-            FitGym
-          </h1>
-
           {/* Subtítulo */}
           <p className="font-body mb-12 text-lg text-gray-600 sm:text-xl">
-            Acesse todos os nossos links em um único lugar
+            Meus Links
           </p>
 
           {/* Linha decorativa */}
