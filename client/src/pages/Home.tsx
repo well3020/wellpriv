@@ -1,11 +1,11 @@
-import { motion, animate, useMotionValue, useTransform } from "framer-motion";
-import { Instagram, Shield, Music, Twitter, Star } from "lucide-react";
-import { useEffect, type ReactNode } from "react";
+import { motion } from "framer-motion";
+import { Instagram, Shield, Music, Twitter, Star, Lock } from "lucide-react";
+import type { ReactNode } from "react";
 
 /**
  * Welington R. - Link na Bio
- * Layout: 100vh - tudo visível em uma única tela, sem scroll
- * Privacy em destaque como "Conteúdos Exclusivos"
+ * Layout: 100dvh - tudo em uma tela
+ * Foto grande, Privacy em destaque máximo, rodapé com direitos reservados
  */
 
 interface LinkItem {
@@ -44,7 +44,7 @@ const LINKS: LinkItem[] = [
   },
 ];
 
-/* ── Floating Particles (menos, mais sutis) ── */
+/* ── Floating Particles ── */
 function FloatingParticles() {
   const particles = Array.from({ length: 12 }, (_, i) => ({
     id: i,
@@ -88,7 +88,7 @@ const textVariants = {
 };
 
 const privacyVariants = {
-  hidden: { opacity: 0, scale: 0.9, filter: "blur(12px)" },
+  hidden: { opacity: 0, scale: 0.85, filter: "blur(14px)" },
   visible: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
@@ -120,30 +120,33 @@ export default function Home() {
 
       <FloatingParticles />
 
-      {/* Layout principal - flex column que ocupa 100dvh */}
+      {/* Layout principal - 100dvh */}
       <motion.div
-        className="relative z-10 mx-auto flex h-full max-w-md flex-col items-center justify-between px-5 py-8 sm:py-10"
+        className="relative z-10 mx-auto flex h-full max-w-md flex-col items-center justify-between px-5 py-6 sm:py-8"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* ── TOPO: Foto + Nome ── */}
+        {/* ── TOPO: Foto grande + Nome ── */}
         <div className="flex flex-col items-center">
-          {/* Foto de perfil */}
+          {/* Foto de perfil GRANDE */}
           <motion.div variants={profileVariants} className="mb-3">
             <div className="relative">
+              {/* Glow pulsante */}
               <motion.div
-                className="absolute -inset-2 rounded-full bg-gradient-to-tr from-[#FF6B35] via-[#FF8C5A] to-[#FF6B35]"
-                animate={{ opacity: [0.35, 0.65, 0.35], scale: [1, 1.04, 1] }}
+                className="absolute -inset-3 rounded-full bg-gradient-to-tr from-[#FF6B35] via-[#FF8C5A] to-[#FF6B35]"
+                animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                style={{ filter: "blur(12px)" }}
+                style={{ filter: "blur(14px)" }}
               />
+              {/* Ring gradiente girando */}
               <motion.div
                 className="absolute -inset-[3px] rounded-full bg-gradient-to-tr from-[#FF6B35] via-[#FF8C5A] to-[#FCAF45]"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               />
-              <div className="relative h-20 w-20 overflow-hidden rounded-full border-[2.5px] border-[#0a0a0a] sm:h-24 sm:w-24">
+              {/* Foto */}
+              <div className="relative h-28 w-28 overflow-hidden rounded-full border-[3px] border-[#0a0a0a] sm:h-32 sm:w-32">
                 <img src="/profile.jpeg" alt="Welington R." className="h-full w-full object-cover" />
               </div>
             </div>
@@ -168,70 +171,89 @@ export default function Home() {
           </motion.p>
         </div>
 
-        {/* ── MEIO: Privacy em destaque + Links ── */}
-        <div className="flex w-full flex-1 flex-col justify-center gap-3 py-4">
-          {/* PRIVACY - Card destaque */}
+        {/* ── MEIO: Privacy GRANDE + Links ── */}
+        <div className="flex w-full flex-1 flex-col justify-center gap-2.5 py-3">
+
+          {/* PRIVACY - Card GRANDE e chamativo */}
           <motion.a
             href="https://privacy.com.br/@Wellribeiro"
             target="_blank"
             rel="noopener noreferrer"
             variants={privacyVariants}
             whileHover={{
-              scale: 1.04,
-              boxShadow: "0 0 50px rgba(255, 107, 53, 0.4)",
+              scale: 1.03,
+              boxShadow: "0 0 60px rgba(255, 107, 53, 0.45)",
               transition: { duration: 0.3 },
             }}
             whileTap={{ scale: 0.97 }}
-            className="group relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border border-[#FF6B35]/30 bg-gradient-to-br from-[#FF6B35]/[0.12] via-[#FF8C5A]/[0.06] to-transparent px-5 py-5 backdrop-blur-sm transition-all duration-300 hover:border-[#FF6B35]/50"
+            className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl border border-[#FF6B35]/40 bg-gradient-to-br from-[#FF6B35]/[0.15] via-[#FF8C5A]/[0.08] to-[#FF6B35]/[0.03] px-6 py-6 backdrop-blur-sm transition-all duration-300 hover:border-[#FF6B35]/60"
           >
             {/* Shimmer */}
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#FF6B35]/[0.08] to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#FF6B35]/[0.1] to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
             {/* Glow pulsante de fundo */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-[#FF6B35]/[0.08] to-transparent"
-              animate={{ opacity: [0.5, 1, 0.5] }}
+              className="absolute inset-0 bg-gradient-to-br from-[#FF6B35]/[0.1] to-transparent"
+              animate={{ opacity: [0.4, 0.8, 0.4] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Ícone + Badge */}
-            <div className="relative flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF6B35] to-[#FF8C5A] text-white shadow-lg shadow-[#FF6B35]/20">
-                <Shield className="h-5 w-5" />
+            {/* Linha superior decorativa */}
+            <motion.div
+              className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF6B35] to-transparent"
+              animate={{ opacity: [0.4, 0.8, 0.4] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+            {/* Badge EXCLUSIVO */}
+            <motion.div
+              className="relative flex items-center gap-1.5 rounded-full bg-[#FF6B35]/25 px-3 py-1"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Star className="h-3.5 w-3.5 fill-[#FF6B35] text-[#FF6B35]" />
+              <span className="text-[11px] font-bold tracking-wider text-[#FF6B35]" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                CONTEÚDO EXCLUSIVO
+              </span>
+              <Star className="h-3.5 w-3.5 fill-[#FF6B35] text-[#FF6B35]" />
+            </motion.div>
+
+            {/* Ícone grande + Título */}
+            <div className="relative flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF6B35] to-[#FF8C5A] text-white shadow-lg shadow-[#FF6B35]/30">
+                <Lock className="h-6 w-6" />
               </div>
-              <motion.div
-                className="flex items-center gap-1 rounded-full bg-[#FF6B35]/20 px-2.5 py-0.5"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <Star className="h-3 w-3 fill-[#FF6B35] text-[#FF6B35]" />
-                <span className="text-[10px] font-semibold text-[#FF6B35]" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                  EXCLUSIVO
-                </span>
-              </motion.div>
+              <div>
+                <h3
+                  className="text-lg font-bold text-white transition-colors duration-300 group-hover:text-[#FF6B35]"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                >
+                  Acesse Agora
+                </h3>
+                <p className="text-[11px] text-white/45" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  Conteúdos exclusivos no Privacy
+                </p>
+              </div>
             </div>
 
-            {/* Texto */}
-            <div className="relative text-center">
-              <h3
-                className="text-base font-bold text-white transition-colors duration-300 group-hover:text-[#FF6B35]"
-                style={{ fontFamily: "'Poppins', sans-serif" }}
-              >
-                Conteúdos Exclusivos
-              </h3>
-              <p className="text-[11px] text-white/40" style={{ fontFamily: "'Inter', sans-serif" }}>
-                Acesse pelo Privacy
-              </p>
-            </div>
+            {/* Botão CTA */}
+            <motion.div
+              className="relative mt-1 rounded-full bg-gradient-to-r from-[#FF6B35] to-[#FF8C5A] px-8 py-2 text-sm font-semibold text-white shadow-lg shadow-[#FF6B35]/25"
+              style={{ fontFamily: "'Poppins', sans-serif" }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Acessar Privacy
+            </motion.div>
           </motion.a>
 
           {/* Separador */}
           <motion.div
             variants={textVariants}
-            className="mx-auto h-[1px] w-12 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+            className="mx-auto h-[1px] w-10 bg-gradient-to-r from-transparent via-white/10 to-transparent"
           />
 
-          {/* Outros links */}
+          {/* Outros links - compactos */}
           {LINKS.map((link, index) => (
             <motion.a
               key={link.id}
@@ -284,20 +306,14 @@ export default function Home() {
           ))}
         </div>
 
-        {/* ── RODAPÉ ── */}
-        <motion.div
+        {/* ── RODAPÉ: Direitos Reservados ── */}
+        <motion.p
           variants={textVariants}
-          className="flex items-center gap-2"
+          className="text-[9px] text-white/15 tracking-wide"
+          style={{ fontFamily: "'Inter', sans-serif" }}
         >
-          <div className="h-[1px] w-6 bg-gradient-to-r from-transparent to-white/10" />
-          <p
-            className="text-[10px] tracking-[0.2em] text-white/15 uppercase"
-            style={{ fontFamily: "'Poppins', sans-serif" }}
-          >
-            Well Privacy
-          </p>
-          <div className="h-[1px] w-6 bg-gradient-to-l from-transparent to-white/10" />
-        </motion.div>
+          &copy; 2025 Welington Ribeiro. Todos os direitos reservados.
+        </motion.p>
       </motion.div>
     </div>
   );
