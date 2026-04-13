@@ -157,13 +157,13 @@ export default function Home() {
             Fitness &bull; Lifestyle &bull; Conteúdo
           </motion.p>
 
-          {/* Contador de Visitas */}
+          {/* Contador de Visitas - AGORA EM VERDE */}
           <motion.div
             variants={textVariants}
-            className="mt-3 flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 border border-white/10"
+            className="mt-3 flex items-center gap-1.5 rounded-full bg-[#22c55e]/10 px-3 py-1 border border-[#22c55e]/20"
           >
-            <Eye className="h-3 w-3 text-white/40" />
-            <span className="text-[10px] font-medium text-white/60" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <Eye className="h-3 w-3 text-[#22c55e]" />
+            <span className="text-[10px] font-bold text-[#22c55e]" style={{ fontFamily: "'Inter', sans-serif" }}>
               {visits !== null ? `${visits.toLocaleString()} visitas` : "Carregando..."}
             </span>
           </motion.div>
@@ -198,18 +198,14 @@ export default function Home() {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Badge EXCLUSIVO - Mais para cima */}
-            <motion.div
-              className="relative flex items-center gap-1.5 rounded-full bg-[#FF6B35]/25 px-3 py-1"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
+            {/* Badge EXCLUSIVO - AGORA ESTÁTICO (sem pulsação) */}
+            <div className="relative flex items-center gap-1.5 rounded-full bg-[#FF6B35]/25 px-3 py-1">
               <Star className="h-3.5 w-3.5 fill-[#FF6B35] text-[#FF6B35]" />
               <span className="text-[11px] font-bold tracking-wider text-[#FF6B35]" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 CONTEÚDO EXCLUSIVO
               </span>
               <Star className="h-3.5 w-3.5 fill-[#FF6B35] text-[#FF6B35]" />
-            </motion.div>
+            </div>
 
             <div className="relative flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF6B35] to-[#FF8C5A] text-white shadow-lg shadow-[#FF6B35]/30">
@@ -228,7 +224,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Botão CTA - Mais para baixo e PULSANDO */}
+            {/* Botão CTA - PULSANDO */}
             <motion.div
               className="relative mt-2 rounded-full bg-gradient-to-r from-[#FF6B35] to-[#FF8C5A] px-10 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#FF6B35]/25"
               style={{ fontFamily: "'Poppins', sans-serif" }}
