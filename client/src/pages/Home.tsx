@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Instagram, Shield, Music, Twitter, Star, Lock } from "lucide-react";
-import type { ReactNode } from "react";
+import { Instagram, Shield, Music, Twitter, Star, Lock, Eye } from "lucide-react";
+import { ReactNode, useEffect, useState } from "react";
 
 /**
  * Welington R. - Link na Bio
@@ -98,6 +98,20 @@ const cardVariants = {
 };
 
 export default function Home() {
+  const [visits, setVisits] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Incrementar visita ao carregar a página
+    fetch("/api/visits/increment", { method: "POST" })
+      .then((res) => res.json())
+      .then((data) => setVisits(data.count))
+      .catch((err) => {
+        console.error("Erro ao contabilizar visita:", err);
+        // Fallback para valor inicial se a API falhar
+        setVisits(360);
+      });
+  }, []);
+
   return (
     <div className="relative h-[100dvh] w-full overflow-hidden bg-[#0a0a0a]">
       {/* Background Glows */}
@@ -169,6 +183,17 @@ export default function Home() {
           >
             Fitness &bull; Lifestyle &bull; Conteúdo
           </motion.p>
+
+          {/* Contador de Visitas */}
+          <motion.div
+            variants={textVariants}
+            className="mt-3 flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 border border-white/10"
+          >
+            <Eye className="h-3 w-3 text-white/40" />
+            <span className="text-[10px] font-medium text-white/60" style={{ fontFamily: "'Inter', sans-serif" }}>
+              {visits !== null ? `${visits.toLocaleString()} visitas` : "Carregando..."}
+            </span>
+          </motion.div>
         </div>
 
         {/* ── MEIO: Privacy GRANDE + Links ── */}
