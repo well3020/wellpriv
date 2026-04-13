@@ -1,48 +1,12 @@
 import { motion } from "framer-motion";
-import { Instagram, Shield, Music, Twitter, Star, Lock, Eye } from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
+import { Star, Lock, Eye, Timer, Percent } from "lucide-react";
+import { useEffect, useState } from "react";
 
 /**
  * Welington R. - Link na Bio
  * Layout: 100dvh - tudo em uma tela
  * Foto grande, Privacy em destaque máximo, rodapé com direitos reservados
  */
-
-interface LinkItem {
-  id: string;
-  label: string;
-  url: string;
-  icon: ReactNode;
-  gradient: string;
-  hoverGlow: string;
-}
-
-const LINKS: LinkItem[] = [
-  {
-    id: "instagram",
-    label: "Instagram",
-    url: "https://www.instagram.com/wel.priv_?igsh=MWhyMjBsaWo4azhkYg==",
-    icon: <Instagram className="h-[18px] w-[18px]" />,
-    gradient: "from-[#E1306C] via-[#F77737] to-[#FCAF45]",
-    hoverGlow: "rgba(225, 48, 108, 0.35)",
-  },
-  {
-    id: "tiktok",
-    label: "TikTok",
-    url: "https://www.tiktok.com/@wel_ribeiro.gym?_r=1&_t=ZS-95RRaizm2qa",
-    icon: <Music className="h-[18px] w-[18px]" />,
-    gradient: "from-[#00f2ea] to-[#ff0050]",
-    hoverGlow: "rgba(0, 242, 234, 0.35)",
-  },
-  {
-    id: "x",
-    label: "X",
-    url: "https://x.com/wellprivado?s=21",
-    icon: <Twitter className="h-[18px] w-[18px]" />,
-    gradient: "from-[#1DA1F2] to-[#0d8ecf]",
-    hoverGlow: "rgba(29, 161, 242, 0.35)",
-  },
-];
 
 /* ── Floating Particles ── */
 function FloatingParticles() {
@@ -92,13 +56,14 @@ const privacyVariants = {
   visible: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, x: -30, filter: "blur(10px)" },
-  visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+const promoVariants = {
+  hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] } },
 };
 
 export default function Home() {
   const [visits, setVisits] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 59, seconds: 59 });
 
   useEffect(() => {
     // Incrementar visita ao carregar a página
@@ -107,9 +72,20 @@ export default function Home() {
       .then((data) => setVisits(data.count))
       .catch((err) => {
         console.error("Erro ao contabilizar visita:", err);
-        // Fallback para valor inicial se a API falhar
         setVisits(360);
       });
+
+    // Timer de 24h
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   return (
@@ -146,20 +122,17 @@ export default function Home() {
           {/* Foto de perfil GRANDE */}
           <motion.div variants={profileVariants} className="mb-3">
             <div className="relative">
-              {/* Glow pulsante */}
               <motion.div
                 className="absolute -inset-3 rounded-full bg-gradient-to-tr from-[#FF6B35] via-[#FF8C5A] to-[#FF6B35]"
                 animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 style={{ filter: "blur(14px)" }}
               />
-              {/* Ring gradiente girando */}
               <motion.div
                 className="absolute -inset-[3px] rounded-full bg-gradient-to-tr from-[#FF6B35] via-[#FF8C5A] to-[#FCAF45]"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               />
-              {/* Foto */}
               <div className="relative h-28 w-28 overflow-hidden rounded-full border-[3px] border-[#0a0a0a] sm:h-32 sm:w-32">
                 <img src="/profile.jpeg" alt="Welington R." className="h-full w-full object-cover" />
               </div>
@@ -196,8 +169,8 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* ── MEIO: Privacy GRANDE + Links ── */}
-        <div className="flex w-full flex-1 flex-col justify-center gap-2.5 py-3">
+        {/* ── MEIO: Privacy GRANDE + Promoção ── */}
+        <div className="flex w-full flex-1 flex-col justify-center gap-4 py-3">
 
           {/* PRIVACY - Card GRANDE e chamativo */}
           <motion.a
@@ -211,26 +184,21 @@ export default function Home() {
               transition: { duration: 0.3 },
             }}
             whileTap={{ scale: 0.97 }}
-            className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl border border-[#FF6B35]/40 bg-gradient-to-br from-[#FF6B35]/[0.15] via-[#FF8C5A]/[0.08] to-[#FF6B35]/[0.03] px-6 py-6 backdrop-blur-sm transition-all duration-300 hover:border-[#FF6B35]/60"
+            className="group relative flex flex-col items-center gap-4 overflow-hidden rounded-3xl border border-[#FF6B35]/40 bg-gradient-to-br from-[#FF6B35]/[0.15] via-[#FF8C5A]/[0.08] to-[#FF6B35]/[0.03] px-6 py-8 backdrop-blur-sm transition-all duration-300 hover:border-[#FF6B35]/60"
           >
-            {/* Shimmer */}
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#FF6B35]/[0.1] to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-
-            {/* Glow pulsante de fundo */}
             <motion.div
               className="absolute inset-0 bg-gradient-to-br from-[#FF6B35]/[0.1] to-transparent"
               animate={{ opacity: [0.4, 0.8, 0.4] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             />
-
-            {/* Linha superior decorativa */}
             <motion.div
               className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF6B35] to-transparent"
               animate={{ opacity: [0.4, 0.8, 0.4] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Badge EXCLUSIVO */}
+            {/* Badge EXCLUSIVO - Mais para cima */}
             <motion.div
               className="relative flex items-center gap-1.5 rounded-full bg-[#FF6B35]/25 px-3 py-1"
               animate={{ scale: [1, 1.05, 1] }}
@@ -243,7 +211,6 @@ export default function Home() {
               <Star className="h-3.5 w-3.5 fill-[#FF6B35] text-[#FF6B35]" />
             </motion.div>
 
-            {/* Ícone grande + Título */}
             <div className="relative flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF6B35] to-[#FF8C5A] text-white shadow-lg shadow-[#FF6B35]/30">
                 <Lock className="h-6 w-6" />
@@ -261,74 +228,84 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Botão CTA */}
+            {/* Botão CTA - Mais para baixo e PULSANDO */}
             <motion.div
-              className="relative mt-1 rounded-full bg-gradient-to-r from-[#FF6B35] to-[#FF8C5A] px-8 py-2 text-sm font-semibold text-white shadow-lg shadow-[#FF6B35]/25"
+              className="relative mt-2 rounded-full bg-gradient-to-r from-[#FF6B35] to-[#FF8C5A] px-10 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#FF6B35]/25"
               style={{ fontFamily: "'Poppins', sans-serif" }}
-              whileHover={{ scale: 1.05 }}
+              animate={{ 
+                scale: [1, 1.05, 1],
+                boxShadow: [
+                  "0 10px 15px -3px rgba(255, 107, 53, 0.25)",
+                  "0 10px 25px -3px rgba(255, 107, 53, 0.5)",
+                  "0 10px 15px -3px rgba(255, 107, 53, 0.25)"
+                ]
+              }}
+              transition={{ 
+                duration: 1.5, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
               Acessar Privacy
             </motion.div>
           </motion.a>
 
-          {/* Separador */}
+          {/* ── BANNER DE PROMOÇÃO ── */}
           <motion.div
-            variants={textVariants}
-            className="mx-auto h-[1px] w-10 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-          />
+            variants={promoVariants}
+            className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md"
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FF6B35]/20 text-[#FF6B35]">
+                <Percent className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-bold text-white" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                  PROMOÇÃO POR TEMPO LIMITADO!
+                </h4>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-white/60" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <span className="font-bold text-[#FF6B35]">40% de desconto</span> na assinatura. Apenas para alguns assinantes, a promoção logo sairá do ar!
+                </p>
+              </div>
+            </div>
 
-          {/* Outros links - compactos */}
-          {LINKS.map((link, index) => (
-            <motion.a
-              key={link.id}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              variants={cardVariants}
-              custom={index}
-              whileHover={{
-                scale: 1.04,
-                boxShadow: `0 0 35px ${link.hoverGlow}`,
-                transition: { duration: 0.3 },
-              }}
-              whileTap={{ scale: 0.97 }}
-              className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 backdrop-blur-sm transition-colors duration-300 hover:border-white/[0.15] hover:bg-white/[0.06]"
-            >
-              {/* Shimmer */}
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+            {/* Cronômetro */}
+            <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3">
+              <div className="flex items-center gap-2 text-[#FF6B35]">
+                <Timer className="h-4 w-4" />
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                  Expira em:
+                </span>
+              </div>
+              <div className="flex gap-2">
+                {[
+                  { label: 'H', value: timeLeft.hours },
+                  { label: 'M', value: timeLeft.minutes },
+                  { label: 'S', value: timeLeft.seconds }
+                ].map((item, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-xs font-bold text-white">
+                      {String(item.value).padStart(2, '0')}
+                    </div>
+                    <span className="mt-1 text-[8px] text-white/30 font-bold">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-              {/* Gradiente hover */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${link.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-[0.07]`} />
-
-              {/* Ícone */}
+            {/* Barra de progresso fake */}
+            <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-white/5">
               <motion.div
-                className={`relative flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${link.gradient} text-white shadow-lg`}
-                whileHover={{ rotate: [0, -8, 8, 0], transition: { duration: 0.5 } }}
-              >
-                {link.icon}
-              </motion.div>
+                className="h-full bg-gradient-to-r from-[#FF6B35] to-[#FF8C5A]"
+                initial={{ width: "85%" }}
+                animate={{ width: "15%" }}
+                transition={{ duration: 86400, ease: "linear" }}
+              />
+            </div>
+          </motion.div>
 
-              {/* Label */}
-              <h3
-                className="relative flex-1 text-sm font-semibold text-white/90 transition-colors duration-300 group-hover:text-white"
-                style={{ fontFamily: "'Poppins', sans-serif" }}
-              >
-                {link.label}
-              </h3>
-
-              {/* Seta */}
-              <svg
-                className="h-3.5 w-3.5 text-white/20 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white/50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </motion.a>
-          ))}
         </div>
 
         {/* ── RODAPÉ: Direitos Reservados ── */}
